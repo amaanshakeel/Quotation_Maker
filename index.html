@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AL HASHMI Quotation Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.4/jspdf.plugin.autotable.min.js" defer></script>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main id="login-screen" class="login-shell">
+      <section class="login-card" aria-labelledby="login-title">
+        <img src="assets/logo-main.jpg" alt="AL HASHMI logo" class="login-logo">
+        <p class="eyebrow">AL HASHMI EVENTS DECORATOR</p>
+        <h1 id="login-title">Quotation Login</h1>
+        <form id="login-form" class="stacked-form" novalidate>
+          <label>
+            Username
+            <input id="username" type="text" autocomplete="username" required>
+          </label>
+          <label>
+            Password
+            <input id="password" type="password" autocomplete="current-password" required>
+          </label>
+          <p id="login-error" class="error-message" role="alert"></p>
+          <button type="submit" class="primary-button">Login</button>
+        </form>
+        <p class="auth-note">Welcome to the Quotation Generator!</p>
+      </section>
+    </main>
+
+    <main id="app-screen" class="app-shell hidden">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <img src="assets/logo-wordmark.jpg" alt="AL HASHMI EVENTS DECORATOR" class="wordmark">
+          <div>
+            <p>AL HASHMI</p>
+            <span>EVENTS DECORATOR</span>
+          </div>
+        </div>
+        <button id="logout-button" type="button" class="ghost-button">Logout</button>
+      </header>
+
+      <section class="workspace">
+        <form id="quotation-form" class="quotation-panel" novalidate>
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Quotation Form</p>
+              <h1>Create Quatation</h1>
+            </div>
+            <div class="button-row">
+              <button id="preview-button" type="button" class="ghost-button">Preview</button>
+              <button id="save-button" type="button" class="secondary-button">Save Quotation</button>
+              <button id="download-button" type="button" class="primary-button">Download PDF</button>
+            </div>
+          </div>
+
+          <p id="form-error" class="error-message" role="alert"></p>
+
+          <section class="form-section" aria-labelledby="customer-title">
+            <h2 id="customer-title">Customer / Function Information</h2>
+            <div class="form-grid">
+              <label>Name <span></span><input name="name" type="text"></label>
+              <label>Address <textarea name="address" rows="2"></textarea></label>
+              <label>Number of Guest <input name="guests" type="number" min="0" step="1"></label>
+              <label>Function Type <span></span><input name="functionType" type="text"></label>
+              <label>Function Date <span></span><input name="functionDate" type="date"></label>
+              <label>Contact No. <span></span><input name="contact" type="tel"><label>
+            </div>
+          </section>
+
+          <section class="form-section" aria-labelledby="booking-title">
+            <h2 id="booking-title">Booking Information</h2>
+            <div class="form-grid">
+              <label>Booked By <input name="bookedBy" type="text"></label>
+              <label>Setup Ready Time <input name="setupReadyTime" type="time"></label>
+              <label>Food Time <input name="foodTime" type="time"></label>
+              <label>Mode of Payment <span>*</span>
+                <select name="paymentMode" required>
+                  <option value="">Select payment mode</option>
+                  <option value="Cash">Cash</option>
+                  <option value="Bank Transfer">Bank Transfer</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+              <label>Advance Amount <input name="advanceAmount" type="number" min="0" step="0.01"></label>
+              <label>Discount
+                <div class="discount-input-group">
+                  <input name="discount" type="number" min="0" step="0.01" value="0">
+                  <select name="discountType">
+                    <option value="flat">Fixed</option>
+                    <option value="percent">%</option>
+                  </select>
+                </div>
+              </label>
+            </div>
+          </section>
+
+          <section class="form-section" aria-labelledby="items-title">
+            <div class="section-heading">
+              <h2 id="items-title">Items</h2>
+              <button id="add-item-button" type="button" class="secondary-button">+ Add Item</button>
+            </div>
+            <div class="items-scroll">
+              <table class="items-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Qty</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                    <th>Remove</th>
+                  </tr>
+                </thead>
+                <tbody id="items-body"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="summary-strip" aria-label="Calculation summary">
+            <div><span>Subtotal</span><strong id="summary-subtotal">0</strong></div>
+            <div><span>Discount</span><strong id="summary-discount">0</strong></div>
+            <div><span>Tax</span><strong id="summary-tax">0</strong></div>
+            <div><span>Final Amount</span><strong id="summary-final">0</strong></div>
+            <div><span>Received</span><strong id="summary-received">0</strong></div>
+            <div><span>Balance</span><strong id="summary-balance">0</strong></div>
+          </section>
+        </form>
+
+        <aside class="preview-panel" aria-labelledby="preview-title">
+          <div class="section-heading">
+            <h2 id="preview-title">Preview</h2>
+          </div>
+          <div id="quotation-preview" class="quotation-preview"></div>
+        </aside>
+      </section>
+
+      <section class="history-panel" aria-labelledby="history-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Browser Storage</p>
+            <h2 id="history-title">Quotation History</h2>
+          </div>
+          <button id="clear-history-button" type="button" class="danger-button">Clear All History</button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+      </section>
+    </main>
+  </body>
+</html>
